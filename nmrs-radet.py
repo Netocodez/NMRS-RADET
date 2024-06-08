@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
 import datetime as dt
+import string
 #d_parser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d-%I-%p')
 
 def CSV_to_Excel():
@@ -266,6 +267,13 @@ def BASELINE_FILE():
         df = pd.read_excel(input_file_path,sheet_name=0, dtype=object)
         dfbaseline['unique identifiers'] = dfbaseline["LGA"].astype(str) + dfbaseline["Facility"].astype(str) + dfbaseline["Hospital Number"].astype(str) + dfbaseline["Unique ID"].astype(str)
         df['unique identifiers'] = df["LGA"].astype(str) + df["FacilityName"].astype(str) + df["PatientHospitalNo"].astype(str) + df["PatientUniqueID"].astype(str)
+        
+        #remove duplicates
+        dfbaseline = dfbaseline.drop_duplicates(subset=['unique identifiers'], keep=False)
+        d = dict(enumerate(string.ascii_uppercase))
+        m = df.duplicated(['unique identifiers'], keep=False)
+        df.loc[m, 'unique identifiers'] += '_' + df[m].groupby(['unique identifiers']).cumcount().map(d)
+        
         df.insert(0, 'S/N.', df.index + 1)
         df['Patient id']=df['unique identifiers'].map(dfbaseline.set_index('unique identifiers')['Patient ID'])
         df['Patient id'] = df['Patient id'].fillna(df['unique identifiers'])
@@ -309,7 +317,7 @@ def BASELINE_FILE():
         df['Precancerous Lesions Treatment Methods']=''
         df['IIT Chance (%)']=''
         df['Date calculated (yyyy-mm-dd)']=''
-        df['Case Manager']=''
+        df['Case Manager']=df['unique identifiers'].map(dfbaseline.set_index('unique identifiers')['Case Manager'])
         
         #rearrange columns
         df = df[['S/N.',
