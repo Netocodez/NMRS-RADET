@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
 import datetime as dt
+from datetime import timedelta
 import string
 #d_parser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d-%I-%p')
 
@@ -13,11 +14,13 @@ def CSV_to_Excel():
                                                                      ('excel file','*.xlsx')))
         df = pd.read_excel(input_file_path,sheet_name=0, dtype=object)
         df.insert(0, 'S/N.', df.index + 1)
-        df.insert(4, 'Patient id', df.index + 1)
+        #df.insert(4, 'Patient id', df.index + 1)
+        df['Patient id']=''
         df['Household Unique No']=''
         df['Received OVC Service?']=''
         df.loc[df['Sex']=="M",'Sex']='Male'
         df.loc[df['Sex']=="F",'Sex']='Female'
+        df['IIT DATE'] = pd.to_datetime(df['LastPickupDate']) + pd.to_timedelta(df['DaysOfARVRefil'], unit='D') + pd.Timedelta(days=29)
         df['DaysOfARVRefil']=df['DaysOfARVRefil'].astype('float')
         df['DaysOfARVRefil'] = (df['DaysOfARVRefil'] / 30).round(1)
         df['TPT Type']=''
@@ -54,6 +57,20 @@ def CSV_to_Excel():
         df['IIT Chance (%)']=''
         df['Date calculated (yyyy-mm-dd)']=''
         df['Case Manager']=''
+        df.loc[(df['CurrentARTStatusWithPillBalance'] == 'InActive') & (df['PatientOutcomeDate'].isna()), 'PatientOutcomeDate'] = df['IIT DATE']
+        df.loc[(df['CurrentARTStatusWithPillBalance'] == 'Active') & (df['PatientOutcomeDate'].isna()), 'PatientOutcomeDate'] = df['LastPickupDate']
+        df.loc[df['CurrentARTStatus']=="Death",'CurrentARTStatus']='Dead'
+        df.loc[df['CurrentARTStatus']=="Discontinued Care",'CurrentARTStatus']='Stopped'
+        df.loc[df['CurrentARTStatus']=="Transferred out",'CurrentARTStatus']='Transferred Out'
+        df.loc[df['CurrentARTStatus']=="LTFU",'CurrentARTStatus']='IIT'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="Death",'CurrentARTStatusWithPillBalance']='Dead'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="Discontinued Care",'CurrentARTStatusWithPillBalance']='Stopped'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="Transferred out",'CurrentARTStatusWithPillBalance']='Transferred Out'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="InActive",'CurrentARTStatusWithPillBalance']='IIT'
+        df.loc[df['ARTStatusPreviousQuarter']=="LTFU",'ARTStatusPreviousQuarter']='IIT'
+        df.loc[df['ARTStatusPreviousQuarter']=="Discontinued Care",'ARTStatusPreviousQuarter']='Stopped'
+        df.loc[df['ARTStatusPreviousQuarter']=="Transferred out",'ARTStatusPreviousQuarter']='Transferred Out'
+        df.loc[df['ARTStatusPreviousQuarter']=="Death",'ARTStatusPreviousQuarter']='Dead'
         
         #rearrange columns
         df = df[['S/N.',
@@ -282,6 +299,7 @@ def BASELINE_FILE():
         df['Received OVC Service?']=''
         df.loc[df['Sex']=="M",'Sex']='Male'
         df.loc[df['Sex']=="F",'Sex']='Female'
+        df['IIT DATE'] = pd.to_datetime(df['LastPickupDate']) + pd.to_timedelta(df['DaysOfARVRefil'], unit='D') + pd.Timedelta(days=29)
         df['DaysOfARVRefil']=df['DaysOfARVRefil'].astype('float')
         df['DaysOfARVRefil'] = (df['DaysOfARVRefil'] / 30).round(1)
         df['TPT Type']=''
@@ -318,6 +336,20 @@ def BASELINE_FILE():
         df['IIT Chance (%)']=''
         df['Date calculated (yyyy-mm-dd)']=''
         df['Case Manager']=df['unique identifiers'].map(dfbaseline.set_index('unique identifiers')['Case Manager'])
+        df.loc[(df['CurrentARTStatusWithPillBalance'] == 'InActive') & (df['PatientOutcomeDate'].isna()), 'PatientOutcomeDate'] = df['IIT DATE']
+        df.loc[(df['CurrentARTStatusWithPillBalance'] == 'Active') & (df['PatientOutcomeDate'].isna()), 'PatientOutcomeDate'] = df['LastPickupDate']
+        df.loc[df['CurrentARTStatus']=="Death",'CurrentARTStatus']='Dead'
+        df.loc[df['CurrentARTStatus']=="Discontinued Care",'CurrentARTStatus']='Stopped'
+        df.loc[df['CurrentARTStatus']=="Transferred out",'CurrentARTStatus']='Transferred Out'
+        df.loc[df['CurrentARTStatus']=="LTFU",'CurrentARTStatus']='IIT'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="Death",'CurrentARTStatusWithPillBalance']='Dead'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="Discontinued Care",'CurrentARTStatusWithPillBalance']='Stopped'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="Transferred out",'CurrentARTStatusWithPillBalance']='Transferred Out'
+        df.loc[df['CurrentARTStatusWithPillBalance']=="InActive",'CurrentARTStatusWithPillBalance']='IIT'
+        df.loc[df['ARTStatusPreviousQuarter']=="LTFU",'ARTStatusPreviousQuarter']='IIT'
+        df.loc[df['ARTStatusPreviousQuarter']=="Discontinued Care",'ARTStatusPreviousQuarter']='Stopped'
+        df.loc[df['ARTStatusPreviousQuarter']=="Transferred out",'ARTStatusPreviousQuarter']='Transferred Out'
+        df.loc[df['ARTStatusPreviousQuarter']=="Death",'ARTStatusPreviousQuarter']='Dead'
         
         #rearrange columns
         df = df[['S/N.',
@@ -521,11 +553,11 @@ root.config(bg="#f0f0f0")
 # Adding a Button to the Window
 convert_button = tk.Button(root, text="SELECT FILE & CONVERT", command=CSV_to_Excel, font=("Helvetica", 14), bg="#4caf50", fg="#ffffff")
 convert_button.pack(pady=10)
-text1 = tk.Label(root, text="Output's empty patiend id! (requires only NMRS file)")
+text1 = tk.Label(root, text="Output's empty patiend id! (requires only NMRS file -> Save Converted Radet)")
 text1.pack(pady=1)
 convert_button = tk.Button(root, text="SELECT FILE & CONVERT", command=BASELINE_FILE, font=("Helvetica", 14), bg="#4caf50", fg="#ffffff")
 convert_button.pack(pady=10)
-text1 = tk.Label(root, text="Output's Patient Id (requires: baseline Radet and NMRS file)")
+text1 = tk.Label(root, text="Output's Patient Id and Case Manager (requires: Baseline Radet -> NMRS file -> Save Converted Radet)")
 text1.pack(pady=1)
 convert_button1 = tk.Button(root, text="EXIT CONVERTER", command=root.destroy, font=("Helvetica", 14), bg="red", fg="#ffffff")
 convert_button1.pack(pady=40)
@@ -535,7 +567,7 @@ text3 = tk.Label(root, text="you will be prompted to select required files and t
 text3.pack(pady=1)
 
 text2 = tk.Label(root, text="Contacts: email: chinedum.pius@gmail.com, phone: +2348134453841")
-text2.pack(pady=30)
+text2.pack(pady=25)
 
 
 # Adding File Dialog
