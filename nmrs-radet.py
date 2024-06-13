@@ -1,16 +1,16 @@
+from tkinter import ttk
+import time
 import pandas as pd
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import *
-import datetime as dt
-from datetime import timedelta
 import string
-#d_parser = lambda x: pd.datetime.strptime(x, '%Y-%m-%d-%I-%p')
 
 def CSV_to_Excel():
         input_file_path = filedialog.askopenfilename(initialdir = '/Desktop', 
                                                         title = 'Select a excel file', 
                                                         filetypes = (('excel file','*.xls'), 
+                                                                     ('excel file','*.xlsx'),
                                                                      ('excel file','*.xlsx')))
         df = pd.read_excel(input_file_path,sheet_name=0, dtype=object)
         df.insert(0, 'S/N.', df.index + 1)
@@ -88,33 +88,32 @@ def CSV_to_Excel():
                     'ARTStartDate',
                     'LastPickupDate',
                     'DaysOfARVRefil',
-                     'LastINHDispensedDate',
-                     'TPT Type',
-                     'TPT Completion date (yyyy-mm-dd)',
-                     'InitialRegimenLine',
-                     'InitialRegimen',
-                     'CurrentRegimenLine',
-                     'CurrentRegimen',
-                     'Date of Regimen Switch/ Substitution (yyyy-mm-dd)',
-                     'PregnancyStatus',
-                     'Date of Full Disclosure (yyyy-mm-dd)',
-                     'OTZEnrollmentDate',
-                     'Number of Support Group (OTZ Club) meeting attended',
-                     'Number of OTZ Modules completed',
-                     'ViralLoadSampleCollectionDate',
-                     'CurrentViralLoad(c/ml)',
-                     'ViralLoadEncounterDate',
-                     'ViralLoadIndication',
-                     'VL Result After VL Sample Collection (c/ml)',
-                     'Date of VL Result After VL Sample Collection (yyyy-mm-dd)',
-                     'Status at Registration',
-                     'EnrollmentDate',
-                     'ARTStatusPreviousQuarter',
-                     'PatientOutcomeDatePreviousQuarter',
-                     'CurrentARTStatusWithPillBalance',
-                     'PatientOutcomeDate',
+                    'LastINHDispensedDate',
+                    'TPT Type',
+                    'TPT Completion date (yyyy-mm-dd)',
+                    'InitialRegimenLine',
+                    'InitialRegimen',
+                    'CurrentRegimenLine',
+                    'CurrentRegimen',
+                    'Date of Regimen Switch/ Substitution (yyyy-mm-dd)',
+                    'PregnancyStatus',
+                    'Date of Full Disclosure (yyyy-mm-dd)',
+                    'OTZEnrollmentDate',
+                    'Number of Support Group (OTZ Club) meeting attended',
+                    'Number of OTZ Modules completed',
+                    'ViralLoadSampleCollectionDate',
+                    'CurrentViralLoad(c/ml)',
+                    'ViralLoadEncounterDate',
+                    'ViralLoadIndication',
+                    'VL Result After VL Sample Collection (c/ml)',
+                    'Date of VL Result After VL Sample Collection (yyyy-mm-dd)',
+                    'Status at Registration',
+                    'EnrollmentDate',
+                    'ARTStatusPreviousQuarter',
+                    'PatientOutcomeDatePreviousQuarter',
+                    'CurrentARTStatusWithPillBalance',
+                    'PatientOutcomeDate',
                     'RTT',
-                     #
                     'If Dead, Cause of Dead',
                     'VA Cause of Dead',
                     'If Transferred out, new facility',
@@ -142,30 +141,9 @@ def CSV_to_Excel():
                     'Case Manager']]
         
         #Convert Date Objects to Date
-        df['DateOfBirth'] = pd.to_datetime(df['DateOfBirth']).dt.date
-        df['ARTStartDate'] = pd.to_datetime(df['ARTStartDate']).dt.date
-        df['LastPickupDate'] = pd.to_datetime(df['LastPickupDate']).dt.date
-        df['LastINHDispensedDate'] = pd.to_datetime(df['LastINHDispensedDate']).dt.date
-        df['TPT Completion date (yyyy-mm-dd)'] = pd.to_datetime(df['TPT Completion date (yyyy-mm-dd)']).dt.date
-        df['Date of Regimen Switch/ Substitution (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Regimen Switch/ Substitution (yyyy-mm-dd)']).dt.date
-        df['Date of Full Disclosure (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Full Disclosure (yyyy-mm-dd)']).dt.date
-        df['ViralLoadSampleCollectionDate'] = pd.to_datetime(df['ViralLoadSampleCollectionDate']).dt.date
-        df['ViralLoadEncounterDate'] = pd.to_datetime(df['ViralLoadEncounterDate']).dt.date
-        df['Date of VL Result After VL Sample Collection (yyyy-mm-dd)'] = pd.to_datetime(df['Date of VL Result After VL Sample Collection (yyyy-mm-dd)']).dt.date
-        df['EnrollmentDate'] = pd.to_datetime(df['EnrollmentDate']).dt.date
-        df['PatientOutcomeDatePreviousQuarter'] = pd.to_datetime(df['PatientOutcomeDatePreviousQuarter']).dt.date
-        df['PatientOutcomeDate'] = pd.to_datetime(df['PatientOutcomeDate']).dt.date
-        df['Date Commenced DMOC (yyyy-mm-dd)'] = pd.to_datetime(df['Date Commenced DMOC (yyyy-mm-dd)']).dt.date
-        df['Date of Return of DMOC Client to Facility (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Return of DMOC Client to Facility (yyyy-mm-dd)']).dt.date
-        df['Date of Commencement of EAC (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Commencement of EAC (yyyy-mm-dd)']).dt.date
-        df['Date of 3rd EAC Completion (yyyy-mm-dd)'] = pd.to_datetime(df['Date of 3rd EAC Completion (yyyy-mm-dd)']).dt.date
-        df['Date of Extended EAC Completion (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Extended EAC Completion (yyyy-mm-dd)']).dt.date
-        df['Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)']).dt.date
-        df['Date of Cervical Cancer Screening (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Cervical Cancer Screening (yyyy-mm-dd)']).dt.date
-        df['Date of Precancerous Lesions Treatment (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Precancerous Lesions Treatment (yyyy-mm-dd)']).dt.date
-        df['BiometricCaptureDate'] = pd.to_datetime(df['BiometricCaptureDate']).dt.date
-        df['Date calculated (yyyy-mm-dd)'] = pd.to_datetime(df['Date calculated (yyyy-mm-dd)']).dt.date
-        
+        dfDates = ['DateOfBirth','ARTStartDate','LastPickupDate','LastINHDispensedDate','TPT Completion date (yyyy-mm-dd)','Date of Regimen Switch/ Substitution (yyyy-mm-dd)','Date of Full Disclosure (yyyy-mm-dd)','ViralLoadSampleCollectionDate','ViralLoadEncounterDate','Date of VL Result After VL Sample Collection (yyyy-mm-dd)','EnrollmentDate','PatientOutcomeDatePreviousQuarter','PatientOutcomeDate','Date Commenced DMOC (yyyy-mm-dd)','Date of Return of DMOC Client to Facility (yyyy-mm-dd)','Date of Commencement of EAC (yyyy-mm-dd)','Date of 3rd EAC Completion (yyyy-mm-dd)','Date of Extended EAC Completion (yyyy-mm-dd)','Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)','Date of Cervical Cancer Screening (yyyy-mm-dd)','Date of Precancerous Lesions Treatment (yyyy-mm-dd)','BiometricCaptureDate','Date calculated (yyyy-mm-dd)']
+        for col in dfDates:
+            df[col] = pd.to_datetime(df[col],errors='coerce').dt.date
         
         #rename columns
         df.columns = ['S/No.',
@@ -208,31 +186,41 @@ def CSV_to_Excel():
                       'Current ART Status',
                       'Date of Current ART Status (yyyy-mm-dd)',
                       'RTT',
-                        'If Dead, Cause of Dead',
-                        'VA Cause of Dead',
-                        'If Transferred out, new facility',
-                        'Reason for Transfer-Out / IIT / Stooped Treatment',
-                        'ART Enrollment Setting',
-                        'Date Commenced DMOC (yyyy-mm-dd)',
-                        'Type of DMOC',
-                        'Date of Return of DMOC Client to Facility (yyyy-mm-dd)',
-                        'Date of Commencement of EAC (yyyy-mm-dd)',
-                        'Number of EAC Sessions Completed',
-                        'Date of 3rd EAC Completion (yyyy-mm-dd)',
-                        'Date of Extended EAC Completion (yyyy-mm-dd)',
-                        'Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)',
-                        'Co-morbidities',
-                        'Date of Cervical Cancer Screening (yyyy-mm-dd)',
-                        'Cervical Cancer Screening Type',
-                        'Cervical Cancer Screening Method',
-                        'Result of Cervical Cancer Screening',
-                        'Date of Precancerous Lesions Treatment (yyyy-mm-dd)',
-                        'Precancerous Lesions Treatment Methods',
-                        'Date Biometrics Enrolled (yyyy-mm-dd)',
-                        'Valid Biometrics Enrolled?',
-                        'IIT Chance (%)',
-                        'Date calculated (yyyy-mm-dd)',
-                        'Case Manager']
+                      'If Dead, Cause of Dead',
+                      'VA Cause of Dead',
+                      'If Transferred out, new facility',
+                      'Reason for Transfer-Out / IIT / Stooped Treatment',
+                      'ART Enrollment Setting',
+                      'Date Commenced DMOC (yyyy-mm-dd)',
+                      'Type of DMOC',
+                      'Date of Return of DMOC Client to Facility (yyyy-mm-dd)',
+                      'Date of Commencement of EAC (yyyy-mm-dd)',
+                      'Number of EAC Sessions Completed',
+                      'Date of 3rd EAC Completion (yyyy-mm-dd)',
+                      'Date of Extended EAC Completion (yyyy-mm-dd)',
+                      'Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)',
+                      'Co-morbidities',
+                      'Date of Cervical Cancer Screening (yyyy-mm-dd)',
+                      'Cervical Cancer Screening Type',
+                      'Cervical Cancer Screening Method',
+                      'Result of Cervical Cancer Screening',
+                      'Date of Precancerous Lesions Treatment (yyyy-mm-dd)',
+                      'Precancerous Lesions Treatment Methods',
+                      'Date Biometrics Enrolled (yyyy-mm-dd)',
+                      'Valid Biometrics Enrolled?',
+                      'IIT Chance (%)',
+                      'Date calculated (yyyy-mm-dd)',
+                      'Case Manager']
+
+        #def start_processing():
+        progress_bar['maximum'] = len(df)
+        for index, row in df.iterrows():
+            process_data(row)
+            progress_bar['value'] = index + 1
+            percentage = (index + 1) / len(df) * 100
+            status_label.config(text=f"Converting: {index + 10}/{len(df)} ({percentage:.2f}%)")
+            root.update_idletasks()
+            status_label.config(text="Conversion Complete!")
         
         #format and export
         output_file_name = input_file_path.split("/")[-1][:-4]
@@ -269,7 +257,8 @@ def BASELINE_FILE():
         input_Bseline = filedialog.askopenfilename(initialdir = '/Desktop', 
                                                         title = 'Select a excel file', 
                                                         filetypes = (('excel file','*.xls'), 
-                                                                     ('excel file','*.xlsx')))
+                                                                     ('excel file','*.xlsx'),
+                                                                     ('excel file','*.xlsb')))
         dfbaseline = pd.read_excel(input_Bseline,sheet_name=0, dtype=object)
             
         
@@ -277,7 +266,8 @@ def BASELINE_FILE():
         input_file_path = filedialog.askopenfilename(initialdir = '/Desktop', 
                                                         title = 'Select a excel file', 
                                                         filetypes = (('excel file','*.xls'), 
-                                                                     ('excel file','*.xlsx')))
+                                                                     ('excel file','*.xlsx'),
+                                                                     ('excel file','*.xlsb')))
 
 
         dfbaseline = pd.read_excel(input_Bseline,sheet_name=0, dtype=object)        
@@ -367,33 +357,32 @@ def BASELINE_FILE():
                     'ARTStartDate',
                     'LastPickupDate',
                     'DaysOfARVRefil',
-                     'LastINHDispensedDate',
-                     'TPT Type',
-                     'TPT Completion date (yyyy-mm-dd)',
-                     'InitialRegimenLine',
-                     'InitialRegimen',
-                     'CurrentRegimenLine',
-                     'CurrentRegimen',
-                     'Date of Regimen Switch/ Substitution (yyyy-mm-dd)',
-                     'PregnancyStatus',
-                     'Date of Full Disclosure (yyyy-mm-dd)',
-                     'OTZEnrollmentDate',
-                     'Number of Support Group (OTZ Club) meeting attended',
-                     'Number of OTZ Modules completed',
-                     'ViralLoadSampleCollectionDate',
-                     'CurrentViralLoad(c/ml)',
-                     'ViralLoadEncounterDate',
-                     'ViralLoadIndication',
-                     'VL Result After VL Sample Collection (c/ml)',
-                     'Date of VL Result After VL Sample Collection (yyyy-mm-dd)',
-                     'Status at Registration',
-                     'EnrollmentDate',
-                     'ARTStatusPreviousQuarter',
-                     'PatientOutcomeDatePreviousQuarter',
-                     'CurrentARTStatusWithPillBalance',
-                     'PatientOutcomeDate',
+                    'LastINHDispensedDate',
+                    'TPT Type',
+                    'TPT Completion date (yyyy-mm-dd)',
+                    'InitialRegimenLine',
+                    'InitialRegimen',
+                    'CurrentRegimenLine',
+                    'CurrentRegimen',
+                    'Date of Regimen Switch/ Substitution (yyyy-mm-dd)',
+                    'PregnancyStatus',
+                    'Date of Full Disclosure (yyyy-mm-dd)',
+                    'OTZEnrollmentDate',
+                    'Number of Support Group (OTZ Club) meeting attended',
+                    'Number of OTZ Modules completed',
+                    'ViralLoadSampleCollectionDate',
+                    'CurrentViralLoad(c/ml)',
+                    'ViralLoadEncounterDate',
+                    'ViralLoadIndication',
+                    'VL Result After VL Sample Collection (c/ml)',
+                    'Date of VL Result After VL Sample Collection (yyyy-mm-dd)',
+                    'Status at Registration',
+                    'EnrollmentDate',
+                    'ARTStatusPreviousQuarter',
+                    'PatientOutcomeDatePreviousQuarter',
+                    'CurrentARTStatusWithPillBalance',
+                    'PatientOutcomeDate',
                     'RTT',
-                     #
                     'If Dead, Cause of Dead',
                     'VA Cause of Dead',
                     'If Transferred out, new facility',
@@ -421,30 +410,9 @@ def BASELINE_FILE():
                     'Case Manager']]
         
         #Convert Date Objects to Date
-        df['DateOfBirth'] = pd.to_datetime(df['DateOfBirth']).dt.date
-        df['ARTStartDate'] = pd.to_datetime(df['ARTStartDate']).dt.date
-        df['LastPickupDate'] = pd.to_datetime(df['LastPickupDate']).dt.date
-        df['LastINHDispensedDate'] = pd.to_datetime(df['LastINHDispensedDate']).dt.date
-        df['TPT Completion date (yyyy-mm-dd)'] = pd.to_datetime(df['TPT Completion date (yyyy-mm-dd)']).dt.date
-        df['Date of Regimen Switch/ Substitution (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Regimen Switch/ Substitution (yyyy-mm-dd)']).dt.date
-        df['Date of Full Disclosure (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Full Disclosure (yyyy-mm-dd)']).dt.date
-        df['ViralLoadSampleCollectionDate'] = pd.to_datetime(df['ViralLoadSampleCollectionDate']).dt.date
-        df['ViralLoadEncounterDate'] = pd.to_datetime(df['ViralLoadEncounterDate']).dt.date
-        df['Date of VL Result After VL Sample Collection (yyyy-mm-dd)'] = pd.to_datetime(df['Date of VL Result After VL Sample Collection (yyyy-mm-dd)']).dt.date
-        df['EnrollmentDate'] = pd.to_datetime(df['EnrollmentDate']).dt.date
-        df['PatientOutcomeDatePreviousQuarter'] = pd.to_datetime(df['PatientOutcomeDatePreviousQuarter']).dt.date
-        df['PatientOutcomeDate'] = pd.to_datetime(df['PatientOutcomeDate']).dt.date
-        df['Date Commenced DMOC (yyyy-mm-dd)'] = pd.to_datetime(df['Date Commenced DMOC (yyyy-mm-dd)']).dt.date
-        df['Date of Return of DMOC Client to Facility (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Return of DMOC Client to Facility (yyyy-mm-dd)']).dt.date
-        df['Date of Commencement of EAC (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Commencement of EAC (yyyy-mm-dd)']).dt.date
-        df['Date of 3rd EAC Completion (yyyy-mm-dd)'] = pd.to_datetime(df['Date of 3rd EAC Completion (yyyy-mm-dd)']).dt.date
-        df['Date of Extended EAC Completion (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Extended EAC Completion (yyyy-mm-dd)']).dt.date
-        df['Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)']).dt.date
-        df['Date of Cervical Cancer Screening (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Cervical Cancer Screening (yyyy-mm-dd)']).dt.date
-        df['Date of Precancerous Lesions Treatment (yyyy-mm-dd)'] = pd.to_datetime(df['Date of Precancerous Lesions Treatment (yyyy-mm-dd)']).dt.date
-        df['BiometricCaptureDate'] = pd.to_datetime(df['BiometricCaptureDate']).dt.date
-        df['Date calculated (yyyy-mm-dd)'] = pd.to_datetime(df['Date calculated (yyyy-mm-dd)']).dt.date
-        
+        dfDates = ['DateOfBirth','ARTStartDate','LastPickupDate','LastINHDispensedDate','TPT Completion date (yyyy-mm-dd)','Date of Regimen Switch/ Substitution (yyyy-mm-dd)','Date of Full Disclosure (yyyy-mm-dd)','ViralLoadSampleCollectionDate','ViralLoadEncounterDate','Date of VL Result After VL Sample Collection (yyyy-mm-dd)','EnrollmentDate','PatientOutcomeDatePreviousQuarter','PatientOutcomeDate','Date Commenced DMOC (yyyy-mm-dd)','Date of Return of DMOC Client to Facility (yyyy-mm-dd)','Date of Commencement of EAC (yyyy-mm-dd)','Date of 3rd EAC Completion (yyyy-mm-dd)','Date of Extended EAC Completion (yyyy-mm-dd)','Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)','Date of Cervical Cancer Screening (yyyy-mm-dd)','Date of Precancerous Lesions Treatment (yyyy-mm-dd)','BiometricCaptureDate','Date calculated (yyyy-mm-dd)']
+        for col in dfDates:
+            df[col] = pd.to_datetime(df[col],errors='coerce').dt.date
         
         #rename columns
         df.columns = ['S/No.',
@@ -487,31 +455,41 @@ def BASELINE_FILE():
                       'Current ART Status',
                       'Date of Current ART Status (yyyy-mm-dd)',
                       'RTT',
-                        'If Dead, Cause of Dead',
-                        'VA Cause of Dead',
-                        'If Transferred out, new facility',
-                        'Reason for Transfer-Out / IIT / Stooped Treatment',
-                        'ART Enrollment Setting',
-                        'Date Commenced DMOC (yyyy-mm-dd)',
-                        'Type of DMOC',
-                        'Date of Return of DMOC Client to Facility (yyyy-mm-dd)',
-                        'Date of Commencement of EAC (yyyy-mm-dd)',
-                        'Number of EAC Sessions Completed',
-                        'Date of 3rd EAC Completion (yyyy-mm-dd)',
-                        'Date of Extended EAC Completion (yyyy-mm-dd)',
-                        'Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)',
-                        'Co-morbidities',
-                        'Date of Cervical Cancer Screening (yyyy-mm-dd)',
-                        'Cervical Cancer Screening Type',
-                        'Cervical Cancer Screening Method',
-                        'Result of Cervical Cancer Screening',
-                        'Date of Precancerous Lesions Treatment (yyyy-mm-dd)',
-                        'Precancerous Lesions Treatment Methods',
-                        'Date Biometrics Enrolled (yyyy-mm-dd)',
-                        'Valid Biometrics Enrolled?',
-                        'IIT Chance (%)',
-                        'Date calculated (yyyy-mm-dd)',
-                        'Case Manager']
+                      'If Dead, Cause of Dead',
+                      'VA Cause of Dead',
+                      'If Transferred out, new facility',
+                      'Reason for Transfer-Out / IIT / Stooped Treatment',
+                      'ART Enrollment Setting',
+                      'Date Commenced DMOC (yyyy-mm-dd)',
+                      'Type of DMOC',
+                      'Date of Return of DMOC Client to Facility (yyyy-mm-dd)',
+                      'Date of Commencement of EAC (yyyy-mm-dd)',
+                      'Number of EAC Sessions Completed',
+                      'Date of 3rd EAC Completion (yyyy-mm-dd)',
+                      'Date of Extended EAC Completion (yyyy-mm-dd)',
+                      'Date of Repeat Viral Load - Post EAC VL Sample Collected (yyyy-mm-dd)',
+                      'Co-morbidities',
+                      'Date of Cervical Cancer Screening (yyyy-mm-dd)',
+                      'Cervical Cancer Screening Type',
+                      'Cervical Cancer Screening Method',
+                      'Result of Cervical Cancer Screening',
+                      'Date of Precancerous Lesions Treatment (yyyy-mm-dd)',
+                      'Precancerous Lesions Treatment Methods',
+                      'Date Biometrics Enrolled (yyyy-mm-dd)',
+                      'Valid Biometrics Enrolled?',
+                      'IIT Chance (%)',
+                      'Date calculated (yyyy-mm-dd)',
+                      'Case Manager']
+
+        #def start_processing():
+        progress_bar['maximum'] = len(df)
+        for index, row in df.iterrows():
+            process_data(row)
+            progress_bar['value'] = index + 1
+            percentage = (index + 1) / len(df) * 100
+            status_label.config(text=f"Converting: {index + 10}/{len(df)} ({percentage:.2f}%)")
+            root.update_idletasks()
+            status_label.config(text="Conversion Complete!")
         
         #format and export
         output_file_name = input_file_path.split("/")[-1][:-4]
@@ -547,7 +525,7 @@ def BASELINE_FILE():
 # Creating Main Window
 root = tk.Tk()
 root.title("NETO's NMRS TO RADET CONVERTER V001")
-root.geometry("600x400")
+root.geometry("700x500")
 root.config(bg="#f0f0f0")
 
 # Adding a Button to the Window
@@ -561,6 +539,18 @@ text1 = tk.Label(root, text="Output's Patient Id and Case Manager (requires: Bas
 text1.pack(pady=1)
 convert_button1 = tk.Button(root, text="EXIT CONVERTER", command=root.destroy, font=("Helvetica", 14), bg="red", fg="#ffffff")
 convert_button1.pack(pady=40)
+
+def process_data(row):
+    time.sleep(0.0005)  # Simulating a time-consuming task
+        
+# Progress bar widget
+progress_bar = ttk.Progressbar(root, orient='horizontal', length=300, mode='determinate')
+progress_bar.pack(pady=20)
+
+# Label for percentage and progress messages
+status_label = tk.Label(root, text="0%", font=('Helvetica', 12))
+status_label.pack(pady=5)
+
 text = tk.Label(root, text="Welcome! to NMRS to RADET Converter!")
 text.pack(pady=1)
 text3 = tk.Label(root, text="you will be prompted to select required files and the location you want to save the converted file")
