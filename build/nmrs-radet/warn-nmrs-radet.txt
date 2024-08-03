@@ -274,7 +274,7 @@ missing module named rpds.List - imported by rpds (top-level), referencing._core
 missing module named rpds.HashTrieSet - imported by rpds (top-level), referencing._core (top-level)
 missing module named rpds.HashTrieMap - imported by rpds (top-level), referencing._core (top-level), jsonschema._types (top-level), jsonschema.validators (top-level)
 missing module named UserDict - imported by pytz.lazy (optional), simplejson.ordered_dict (top-level)
-missing module named zstandard - imported by urllib3.util.request (optional), urllib3.response (optional)
+missing module named zstandard.backend_rust - imported by zstandard (conditional)
 missing module named brotli - imported by urllib3.util.request (optional), urllib3.response (optional)
 missing module named brotlicffi - imported by urllib3.util.request (optional), urllib3.response (optional)
 missing module named socks - imported by urllib3.contrib.socks (optional)

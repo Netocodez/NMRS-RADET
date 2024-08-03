@@ -8510,4 +8510,10 @@
    'PYMODULE'),
   ('zmq.utils.jsonapi',
    'C:\\Python311\\Lib\\site-packages\\zmq\\utils\\jsonapi.py',
+   'PYMODULE'),
+  ('zstandard',
+   'C:\\Python311\\Lib\\site-packages\\zstandard\\__init__.py',
+   'PYMODULE'),
+  ('zstandard.backend_cffi',
+   'C:\\Python311\\Lib\\site-packages\\zstandard\\backend_cffi.py',
    'PYMODULE')])
